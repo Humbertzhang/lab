@@ -22,9 +22,8 @@ string lower(string word);
 void getdic();
 int valid(Vector<string> & lines,string word);
 
-
 Vector<string> lines;//每行单词的队列
-Vector<string> used;
+
 
 
 int main() {
@@ -36,11 +35,11 @@ int main() {
     getdic();//读取字典函数
     
     string word1,word2;
-
+    Vector<string> used;
 
     while(true){
     cout<< " "<<endl;
-    cout <<"input '1' to exit"<<endl;
+    cout <<"input '0' to exit"<<endl;
     cout <<"Word #1:"<<endl;
     cin  >> word1;
     cout <<"Word #2:"<<endl;
@@ -59,7 +58,7 @@ int main() {
             cout <<"The two words must be different."<<endl;
             continue;
             }
-        if (word1 == "0"){
+        if (word1[0] == '0'){
             cout<<"Have a nice day"<<endl;
             break;
         }
@@ -71,7 +70,6 @@ int main() {
         first.push(word1);
         queues.enqueue(first);
         while(!queues.isEmpty()){
-
             ladder = queues.dequeue();
             string word = ladder.peek();
             if (word == word2){
@@ -89,7 +87,6 @@ int main() {
                             goto output;
                             }
                         if (valid(lines,next) && !valid(used,next)){
-
                             Stack<string> ladder2 = ladder;
                             ladder2.push(next);
                             queues.enqueue(ladder2);
@@ -104,14 +101,18 @@ int main() {
                 cout<<"No Word Latter from "<<word2<<" to "<<word1<<endl;
             }
             else if(!ladderend.isEmpty()){
-                cout << "Ladder From "<<word2<<" back to "<<word1<< endl;
+                cout << "Ladder From "<<word2<<" back to "<<word1<<":"<< endl;
                 while(!ladderend.isEmpty()){
                     cout << ladderend.pop() <<"  ";
                     }
             }
-
+            ladder.clear();
+            ladderend.clear();
+            queues.clear();
+            used.clear();
         }
     }
+
     return 0;
 }
 
@@ -144,6 +145,7 @@ void getdic()
                 else 
                     lines.add(str);
                 }
+            doc.close();
             break;
             }
         }    
