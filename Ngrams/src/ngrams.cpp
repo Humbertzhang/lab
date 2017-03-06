@@ -16,7 +16,6 @@
 
 using namespace std;
 
-void PutinArgs(int N,int length);
 void ScanDocument(string & doc,Vector<string> & lines);
 void GenerateMap(Map<Vector<string>,Vector<string>> & map,Vector<string> & lines,int N);
 
@@ -26,7 +25,8 @@ int main() {
     setConsoleSize(750, 450);
     setConsoleFont("Courier New-16");
     setConsoleEcho(true);
-while(true){
+    
+    while(true){   //一直输入输出
 
     string doc;
     int N,length;//N:Ngrams length: how many words u want to put out.
@@ -79,15 +79,6 @@ while(true){
 }
     
     return 0;
-}
-
-
-void PutinArgs(int N,int length)
-{
-    cout << "Value of N?";
-    cin >> N;
-    cout << "Length of the words?";
-    cin >> length;
 }
 
 void ScanDocument(string & doc,Vector<string> & lines)
@@ -161,25 +152,3 @@ void GenerateMap(Map<Vector<string>,Vector<string>> & map,Vector<string> & lines
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
