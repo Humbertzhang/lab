@@ -190,7 +190,10 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+  x = ((((((((((x>>16)|x)>>8)|x)>>4)|x)>>2)|x)>>1)|x);//有一个1就会把其他的都变成1，而只有0时会一直是0
+  x = (~x&1);
+  printf("%d",x);
+  return x;
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -199,7 +202,10 @@ int bang(int x) {
  *   Rating: 1
  */
 int tmin(void) {
-  return 2;
+  int x =1;
+  x = x << 31;
+  printf("%d",x);
+  return x;
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -211,6 +217,7 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
+  
   return 2;
 }
 /* 
@@ -248,9 +255,7 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-  x = x >> 31;
-  x = x&0x00000001;     //符号位是正此时为1，符号位为负此时为0
-  x = x ^ 1;            //故此时应与1取异或。
+  x = ((x>>31)&1)^(!!x);
   return x;
 }
 /* 
@@ -262,8 +267,7 @@ int isPositive(int x) {
  */
 int isLessOrEqual(int x, int y) {
   x = x + (~y+1);//x - y
-  x = x >> 31;
-  x = x&0x00000001;
+  x = (((x>>31)&1)^(!!x))^1;
   printf("%d",x);
   return x;
 }
