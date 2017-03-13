@@ -222,7 +222,9 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-    x = x >> n;
+    int a; 
+    a = (((x + (~0+1))>>31)&0x00000001);//联想 islessorequal. x与0相比是大则a = 0 ，否则a = 1;
+    x = (x +(a<<n)-a)>>n;
     printf("%d",x);
     return x;
 }
