@@ -167,10 +167,8 @@ int getByte(int x, int n) {
  */
 int logicalShift(int x, int n) 
 {
-    x = x >> n;
-     
-    
-    return 2;
+    int a =  ~(((0x1<<31)>>n)<<1); //前n位为0，后面位为1.使得与x>>n 取位与时可以把前n位（可能有符号位带来的1）清除掉，且后面的不变.
+    return (a&(x>>n));
 }
 /*
  * bitCount - returns count of number of 1's in word
@@ -180,7 +178,28 @@ int logicalShift(int x, int n)
  *   Rating: 4
  */
 int bitCount(int x) {
-  return 2;
+  int i,sum=0;
+  //i = 0x11111111
+  i = 0x11;
+  i = 0x11 | (0x11 << 8);
+  i = i | ( i << 16 );
+  
+  sum += x & i;
+  sum +=(x>>1)&i;
+  sum +=(x>>2)&i;
+  sum +=(x>>3)&i;
+  
+  i = 0xff | (0xff << 8); // i = 0xffff
+  sum = (sum >> 16) + (sum & i);//前16位+后16位,保存在后16位上
+                                //之所以i 与 sum 取位与，是要把前面位数的1全变成0，只保留后面的1.
+  
+  i = 0x0f | (0x0f << 8); // i = 0x0f0f
+  sum = ((sum >> 4) & i) + (sum & i);//将后16位分成前后8位两组，每组都存放在后面4位上。
+  
+  i = 0xff;
+  sum = (sum>>8) + (sum & i);
+
+  return sum;
 }
 /* 
  * bang - Compute !x without using !
@@ -190,9 +209,9 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-  x = ((((((((((x>>16)|x)>>8)|x)>>4)|x)>>2)|x)>>1)|x);//有一个1就会把其他的都变成1，而只有0时会一直是0
-  x = (~x&1);
-  printf("%d",x);
+  x = ((x|(~x+1))>>31);  //对于X的符号位：若x = 0,(x|-x) = 0  若x != 0 ,(x|-x) = 1,因为总有一个是负的，而负的符号位必定为1.
+                         //位移31后为 0 (0)或 0xffffffff(非0),此时，0+1,返回1，0xffffffff + 1 因为溢出返回0
+  x = x+1;
   return x;
 }
 /* 
@@ -204,7 +223,6 @@ int bang(int x) {
 int tmin(void) {
   int x =1;
   x = x << 31;
-  printf("%d",x);
   return x;
 }
 /* 
@@ -217,8 +235,9 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  
-  return 2;
+  int move;
+  move = 32 +(~n+1);   
+  return !(x^((x<<move)>>move));
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -230,9 +249,8 @@ int fitsBits(int x, int n) {
  */
 int divpwr2(int x, int n) {
     int a; 
-    a = (((x + (~0+1))>>31)&0x00000001);//联想 islessorequal. x与0相比是大则a = 0 ，否则a = 1;
-    x = (x +(a<<n)-a)>>n;
-    printf("%d",x);
+    a = (((x + (~0+1))>>31)&0x00000001);// x与0相比是大则a = 0 ，否则a = 1;
+    x = (x +(a<<n)+(~a+1))>>n;
     return x;
 }
 /* 
@@ -244,7 +262,6 @@ int divpwr2(int x, int n) {
  */
 int negate(int x) {
   x = (~x + 1);
-  printf("%d",x);
   return x;
 }
 /* 
@@ -255,7 +272,7 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-  x = ((x>>31)&1)^(!!x);
+  x = ((x>>31)&1)^(!!x);//((x>>31)&1)取x的符号.(!!x):若x为0，则仍为0，否则为一。此时再取^满足题意。
   return x;
 }
 /* 
@@ -265,11 +282,19 @@ int isPositive(int x) {
  *   Max ops: 24
  *   Rating: 3
  */
-int isLessOrEqual(int x, int y) {
+
+/*int isLessOrEqual(int x, int y) {
   x = x + (~y+1);//x - y
-  x = (((x>>31)&1)^(!!x))^1;
-  printf("%d",x);
+  x = ((((x>>31)&1)^(!!x))^1);
   return x;
+}*/ //Wrong!!! 
+int isLessOrEqual(int x,int y){
+    int xsymbol,ysymbol,same,diff;
+    xsymbol = x>>31;
+    ysymbol = y>>31;
+    same = ((x+(~y))>>31)&(!(xsymbol^ysymbol));
+    diff = (xsymbol&(!ysymbol));
+    return same|diff;
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
