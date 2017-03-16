@@ -304,7 +304,31 @@ int isLessOrEqual(int x,int y){
  *   Rating: 4
  */
 int ilog2(int x) {
-  return 2;
+  int shift1,shift2,shift3,shift4,shift5,suspector;
+  
+  suspector = !!(x>>16);
+  shift1 = suspector << 4;
+  x = x >> shift1;  //如果还有1，则shift1 = 1,左移4位为16
+                    //否则 shift = 0,无论如何位移，shift以及下方的shift 都为0了
+
+  suspector = !!(x>>8);
+  shift2 = suspector <<3;
+  x = x >> shift2;
+
+  suspector = !!(x>>4);
+  shift3 = suspector <<2;
+  x = x >> shift3;
+
+  suspector = !!(x>>2);
+  shift4 = suspector <<1;
+  x = x >>shift4;
+
+  suspector = !!(x>>1);
+  shift5 = suspector;
+  x = x >> shift5;
+  
+  int result = shift1 + shift2 + shift3 + shift4 + shift5;
+  return result ;
 }
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
