@@ -342,7 +342,18 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+    int temp,temp2,result;
+ 
+    int j = 1;
+    j = j<<31;  //j = 0x80000000
+    temp = uf ^ j; //最高位取反
+    result = temp;
+
+    temp2 = uf & 0x7fffffff;//去除符号位的影响来判断是否为NAN
+    if (temp2 > 0x7f800000)
+        result = uf;
+
+ return result;
 }
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x
