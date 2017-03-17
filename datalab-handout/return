@@ -305,7 +305,7 @@ int isLessOrEqual(int x,int y){
  */
 int ilog2(int x) {
   int shift1,shift2,shift3,shift4,shift5,suspector;
-                                                     //即找最开始的1出现的位置
+  
   suspector = !!(x>>16);
   shift1 = suspector << 4;
   x = x >> shift1;  //如果还有1，则shift1 = 1,左移4位为16
@@ -365,39 +365,29 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
-  unsigned sign=0,exp=31,frac=0;
+  unsigned sign,abs,expcount=0,exp;
   unsigned i = 0x1;
-  i <<= 31;         //i = 0x80000000;
-  
-  if (x == 0) 
+  if (x == 0)
     return 0x0;
-  
   if (x < 0){
-    sign = i;
-    x = -x;
+      i = i << 31;      //i = 0x80000000
+      sign = (x & i);   //得到符号位
+      abs = -x;
   }
 
   while(1){
-    if(x&i) break;
-    exp -= 1;     //exp 总共减去第一个1前面的位数
-    x <<= 1;      //算出移到第一个1之前需要位移几位
-  }                         
-  
-  exp = ((exp+127) << 23);  //把小数点移到第一个1后面需要的位数，再加上偏移量(127)的二进制形式即为阶码
+    int temp;
+    temp = abs;
+    abs <<= 1;
+    expcount ++;
+    if(abs&i)     
+        break;          //找到最开始的1
+  }
 
+    expcount += 127;
+    exp = (expcount << 23);
+  return 2;
 
-  //因为x第一个1位移到开头之后的23位为尾数，而尾数之后的8位可能有1，故需进位
-  
-  unsigned d=0;
-  if((x&0x000001ff) == 0x180) 
-    d = 1;
-  else if((x&0xff) > 0x80)
-    d = 1;
-  frac = ((x&0x7fffffff) >> 8) + d; //尾数为去掉符号位之后向右移8位到达尾数该在的位置
-  
-  unsigned result=0;
-  result = sign + exp + frac; 
-  return result;
 }
 /* 
  * float_twice - Return bit-level equivalent of expression 2*f for
@@ -411,7 +401,5 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-  
-  
-  return 2;
+    return 2;
 }
