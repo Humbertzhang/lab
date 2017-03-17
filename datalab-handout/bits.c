@@ -411,7 +411,14 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
+  unsigned sign = (uf & (0x80000000));
   
-  
-  return 2;
+  if((uf & 0x7fffffff)>=0x7f800000)    //NaN和0x80000000返回本身
+    return uf;
+
+  if((uf & 0x7f800000)==0)          //判断阶码是否为0
+    uf = ((uf << 1)|sign);
+  else
+    uf += 0x00800000;
+  return uf;
 }
