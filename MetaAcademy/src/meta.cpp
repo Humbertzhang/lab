@@ -192,6 +192,7 @@ void demoExploration(GWindow &window) {
 
     // main event loop to process events as they happen
     while (true) {
+
         GEvent e = waitForEvent(MOUSE_EVENT | ACTION_EVENT);
         if (e.getEventClass() == MOUSE_EVENT) {
             if (e.getEventType() != MOUSE_CLICKED) { continue; }
@@ -201,6 +202,10 @@ void demoExploration(GWindow &window) {
             int color = colorMap[colorStr];
             int mx = (int) mouseEvent.getX();
             int my = (int) mouseEvent.getY();
+
+            extern int oldColor;//HUMBERT ADD
+            oldColor = floodFillPixels.getRGB(mx,my);//HUMBERT ADD
+
             cout << "Flood fill (x=" << dec << mx << ", y=" << my << "),"
                  << " color " << hex << setw(6) << setfill('0') << color
                  << dec << ": ";

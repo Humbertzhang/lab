@@ -43,9 +43,10 @@ void serpinskii(GWindow &w, int leftX, int leftY, int size, int order) {
 }
 
 int count;
+int oldColor;
 int floodFill(GBufferedImage& image, int x, int y, int newColor) {
 
-    static int oldColor = image.getRGB(x,y);
+    //static int oldColor = image.getRGB(x,y);
     int colorNow = image.getRGB(x,y);
 
     if (colorNow == newColor){
@@ -90,7 +91,7 @@ void personalCurriculum(Map<string, Vector<string>> & prereqMap,string goal) {
 }
 
 string generate(Map<string, Vector<string> > & grammar, string symbol) {
-    // your code here
+
     cout << "[recursion generate called]" << endl;
     return "";
 }
