@@ -28,6 +28,7 @@ const int FRACTALS_LEFT_X = 100;
 const int FRACTALS_LEFT_Y = 80;
 const int FRACTALS_SIZE = 400;
 
+
 // high level helpers
 void showSplash(GWindow & w);
 void waitToReturnToMenu();
@@ -206,6 +207,8 @@ void demoExploration(GWindow &window) {
             cout.flush();
             int pixelsColored = floodFill(floodFillPixels, mx, my, color);
             cout << pixelsColored << " pixels colored." << endl;
+            extern int count;//ADD BY HUMBERTZHANG
+            count = 0;       //ADD BY HUMBERTZHANG
             colorList.setEnabled(true);
         } else if(e.getEventClass() == ACTION_EVENT) {
             window.remove(&floodFillPixels);
