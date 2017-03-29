@@ -5,6 +5,7 @@
 
 #include <math.h>
 #include "recursion.h"
+#include "lexicon.h"
 #include "map.h"
 #include "vector.h"
 #include "set.h"
@@ -69,9 +70,23 @@ int floodFill(GBufferedImage& image, int x, int y, int newColor) {
     cout << "[recursion flood fill called]" << endl;
 }
 
+Map <string,int> printed;
 void personalCurriculum(Map<string, Vector<string>> & prereqMap,string goal) {
-    // your code here
-    cout << "[recursion personal curriculum called]" << endl;
+    if(!prereqMap.containsKey(goal)&&!printed.containsKey(goal)){
+        cout << goal <<endl;
+        printed.put(goal,1);
+        return;
+    }else{
+        for(int i=0;i<(prereqMap.get(goal).size());i++){
+            personalCurriculum(prereqMap,prereqMap.get(goal).get(i));
+            if(!printed.containsKey(prereqMap.get(goal).get(i))){
+                cout << prereqMap.get(goal).get(i) <<endl;
+                printed.put(prereqMap.get(goal).get(i),1);
+                //Map.get(goal) is a vector.
+                //Map.get(goal).get(i) is a string located in vector[i]
+            }
+        }
+    }
 }
 
 string generate(Map<string, Vector<string> > & grammar, string symbol) {

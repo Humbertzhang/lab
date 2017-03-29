@@ -302,6 +302,8 @@ string getPreReqFileName() {
  * their goal concept.
  */
 void makePersonalCurriculum() {
+    extern Map <string,int> printed;    //ADD BY HUMBERT
+    printed.clear();                    //ADD BY HUMBERT
     string fileName = getPreReqFileName();
     Map<string, Vector<string>> prereqMap = loadPrereqMap(fileName);
     string goal;
@@ -319,6 +321,7 @@ void makePersonalCurriculum() {
     }
     cout << "The order you should learn concepts:" << endl;
     personalCurriculum(prereqMap, goal);
+    cout << goal <<endl;
     cout << endl;
     waitToReturnToMenu();
 }
