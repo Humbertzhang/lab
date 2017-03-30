@@ -91,7 +91,20 @@ void personalCurriculum(Map<string, Vector<string>> & prereqMap,string goal) {
 }
 
 string generate(Map<string, Vector<string> > & grammar, string symbol) {
+    string str;
+    Vector <string> value;
+    if(grammar.containsKey(symbol)){
+        value = grammar.get(symbol);
+        int randomNum = randomInteger(0,value.size()-1);
+        string randomStr = value.get(randomNum);
+        TokenScanner tokenScanner(randomStr);
+        while (tokenScanner.hasMoreTokens()) {
+            string newToken = tokenScanner.nextToken();
+            str += generate(grammar,newToken);
+        }
+    }else{
+        str += symbol;
+    }
 
-    cout << "[recursion generate called]" << endl;
-    return "";
+    return str;
 }
