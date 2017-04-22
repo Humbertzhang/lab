@@ -27,7 +27,27 @@ int gcd(int a, int b) {
     return 0;
 }
 
+int ChangeAndSum( GBufferedImage& image , int x ,int y , int newColor ,int old ) {
 
+    if ( image.inBounds(x,y) && image.getRGB(x,y)==old) {
+
+        image.setRGB( x , y , newColor );
+        return 1 + ChangeAndSum(image,x,y+1,newColor,old) + ChangeAndSum(image,x,y-1,newColor,old) + ChangeAndSum(image,x+1,y,newColor,old) + ChangeAndSum(image,x-1,y,newColor,old) ;
+    }
+
+    else return 0 ;
+}
+
+int floodFill(GBufferedImage& image, int x, int y, int newColor) {
+    // your code here
+    int old = image.getRGB(x,y) ;
+    if ( newColor == old ) {
+        return 0;
+    }
+
+    else
+        return ChangeAndSum(image , x, y , newColor , old ) ;
+}
 
 void serpinskii(GWindow &w, int leftX, int leftY, int size, int order) {
     if (order>0){
@@ -41,7 +61,7 @@ void serpinskii(GWindow &w, int leftX, int leftY, int size, int order) {
     }
     //cout << "[recursion serpinskii called]" << endl;
 }
-
+/*
 int count;
 int oldColor;
 int floodFill(GBufferedImage& image, int x, int y, int newColor) {
@@ -70,7 +90,7 @@ int floodFill(GBufferedImage& image, int x, int y, int newColor) {
         }
     cout << "[recursion flood fill called]" << endl;
 }
-
+*/
 Map <string,int> printed;
 void personalCurriculum(Map<string, Vector<string>> & prereqMap,string goal) {
     if(!prereqMap.containsKey(goal)&&!printed.containsKey(goal)){

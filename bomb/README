@@ -1,0 +1,281 @@
+This is an x86-64 bomb for self-study students.
+
+
+Dump of assembler code for function phase_2:
+   0x0000000000400efc <+0>:	push   %rbp
+   0x0000000000400efd <+1>:	push   %rbx
+   0x0000000000400efe <+2>:	sub    $0x28,%rsp
+   0x0000000000400f02 <+6>:	mov    %rsp,%rsi
+   0x0000000000400f05 <+9>:	callq  0x40145c <read_six_numbers>
+   0x0000000000400f0a <+14>:	cmpl   $0x1,(%rsp)
+   0x0000000000400f0e <+18>:	je     0x400f30 <phase_2+52>
+   0x0000000000400f10 <+20>:	callq  0x40143a <explode_bomb>
+   0x0000000000400f15 <+25>:	jmp    0x400f30 <phase_2+52>
+   0x0000000000400f17 <+27>:	mov    -0x4(%rbx),%eax
+   0x0000000000400f1a <+30>:	add    %eax,%eax
+   0x0000000000400f1c <+32>:	cmp    %eax,(%rbx)
+   0x0000000000400f1e <+34>:	je     0x400f25 <phase_2+41>
+   0x0000000000400f20 <+36>:	callq  0x40143a <explode_bomb>
+   0x0000000000400f25 <+41>:	add    $0x4,%rbx
+   0x0000000000400f29 <+45>:	cmp    %rbp,%rbx
+   0x0000000000400f2c <+48>:	jne    0x400f17 <phase_2+27>
+   0x0000000000400f2e <+50>:	jmp    0x400f3c <phase_2+64>
+   0x0000000000400f30 <+52>:	lea    0x4(%rsp),%rbx
+   0x0000000000400f35 <+57>:	lea    0x18(%rsp),%rbp    //0x18 = 24!!!
+   0x0000000000400f3a <+62>:	jmp    0x400f17 <phase_2+27>
+   0x0000000000400f3c <+64>:	add    $0x28,%rsp
+   0x0000000000400f40 <+68>:	pop    %rbx
+   0x0000000000400f41 <+69>:	pop    %rbp
+   0x0000000000400f42 <+70>:	retq   
+
++6:  %rsi=%rsp
++9:  读取6个数字
++14: 比较第一个数字（%rsp）与0x1是否相等（第一个数字应该为1） jump to 52
++52: %rbx = %rsp+4  
++57: %rbp = %rsp+18     jump to 27
++27: %eax = (%rbx-4)也即等于(%rsp),即第一个数字1
++30: %eax *=2,%eax = 2
++32: 比较%eax(数值为2)与 第二个数字(%rbx),即(%rsp+4),是否相等  if equal , jump to 41
++41: %rbx+=4,此时(%rbx)为第三个数
++45: 比较%rbp与%rbx地址是否相等（不相等jump to 27，相等jump to end）
++27: 重复上述+27至+45到jump to end,重复6次
+
+所以答案为 1 2 4 8 16 32
+
+***
+
+Dump of assembler code for function phase_3:
+   0x0000000000400f43 <+0>:	sub    $0x18,%rsp
+   0x0000000000400f47 <+4>:	lea    0xc(%rsp),%rcx
+   0x0000000000400f4c <+9>:	lea    0x8(%rsp),%rdx
+   0x0000000000400f51 <+14>:	mov    $0x4025cf,%esi
+   0x0000000000400f56 <+19>:	mov    $0x0,%eax
+   0x0000000000400f5b <+24>:	callq  0x400bf0 <__isoc99_sscanf@plt>
+   0x0000000000400f60 <+29>:	cmp    $0x1,%eax
+   0x0000000000400f63 <+32>:	jg     0x400f6a <phase_3+39>
+   0x0000000000400f65 <+34>:	callq  0x40143a <explode_bomb>
+   0x0000000000400f6a <+39>:	cmpl   $0x7,0x8(%rsp)
+   0x0000000000400f6f <+44>:	ja     0x400fad <phase_3+106>
+   0x0000000000400f71 <+46>:	mov    0x8(%rsp),%eax
+   0x0000000000400f75 <+50>:	jmpq   *0x402470(,%rax,8)
+   0x0000000000400f7c <+57>:	mov    $0xcf,%eax
+   0x0000000000400f81 <+62>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400f83 <+64>:	mov    $0x2c3,%eax
+   0x0000000000400f88 <+69>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400f8a <+71>:	mov    $0x100,%eax
+   0x0000000000400f8f <+76>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400f91 <+78>:	mov    $0x185,%eax
+   0x0000000000400f96 <+83>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400f98 <+85>:	mov    $0xce,%eax
+   0x0000000000400f9d <+90>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400f9f <+92>:	mov    $0x2aa,%eax
+   0x0000000000400fa4 <+97>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400fa6 <+99>:	mov    $0x147,%eax
+   0x0000000000400fab <+104>:	jmp    0x400fbe <phase_3+123>
+   0x0000000000400fad <+106>:	callq  0x40143a <explode_bomb>
+   0x0000000000400fb2 <+111>:	mov    $0x0,%eax
+   0x0000000000400fb7 <+116>:	jmp    0x400fbe <phase_3+123>
+---Type <return> to continue, or q <return> to quit---
+   0x0000000000400fb9 <+118>:	mov    $0x137,%eax
+   0x0000000000400fbe <+123>:	cmp    0xc(%rsp),%eax
+   0x0000000000400fc2 <+127>:	je     0x400fc9 <phase_3+134>
+   0x0000000000400fc4 <+129>:	callq  0x40143a <explode_bomb>
+   0x0000000000400fc9 <+134>:	add    $0x18,%rsp
+   0x0000000000400fcd <+138>:	retq   
+
+
++14: mov 0x4025cf,%esi   此处 x/s 0x4025cf 发现为 "%d %d" 
++24: scanf语句，并将读入了几个数据放到%eax中
++29: 比较%eax 与1 大小，如果%eax 小于等于1,则直接爆炸（此处我们只需读进2个即可）+32跳到+39
++39: 0x8(%rsp)应小于等于7,否则爆炸（爆炸跳到+106）
++46:  %eax（%rax） 为0x8(%rsp)大小
++50: x/a 0x402470 得0x400f7c，  即跳转到0x400f7c + 8*%rax 的位置,而%rax 应小于等于7.此处我们简单选择为0,则跳到0x400f7c(+57)
++57: %eax = 0xcf 即207,跳转到+123
++123: 比较（%rsp+12）与%eax 大小，相等则炸弹解除
+故我们的答案之一为 0 207
+
+***
+
+Dump of assembler code for function phase_4:
+   0x000000000040100c <+0>:	sub    $0x18,%rsp
+   0x0000000000401010 <+4>:	lea    0xc(%rsp),%rcx
+   0x0000000000401015 <+9>:	lea    0x8(%rsp),%rdx
+   0x000000000040101a <+14>:	mov    $0x4025cf,%esi
+   0x000000000040101f <+19>:	mov    $0x0,%eax
+   0x0000000000401024 <+24>:	callq  0x400bf0 <__isoc99_sscanf@plt>
+   0x0000000000401029 <+29>:	cmp    $0x2,%eax
+   0x000000000040102c <+32>:	jne    0x401035 <phase_4+41>
+   0x000000000040102e <+34>:	cmpl   $0xe,0x8(%rsp)
+   0x0000000000401033 <+39>:	jbe    0x40103a <phase_4+46>
+   0x0000000000401035 <+41>:	callq  0x40143a <explode_bomb>
+   0x000000000040103a <+46>:	mov    $0xe,%edx
+   0x000000000040103f <+51>:	mov    $0x0,%esi
+   0x0000000000401044 <+56>:	mov    0x8(%rsp),%edi
+   0x0000000000401048 <+60>:	callq  0x400fce <func4>
+   0x000000000040104d <+65>:	test   %eax,%eax
+   0x000000000040104f <+67>:	jne    0x401058 <phase_4+76>
+   0x0000000000401051 <+69>:	cmpl   $0x0,0xc(%rsp)
+   0x0000000000401056 <+74>:	je     0x40105d <phase_4+81>
+   0x0000000000401058 <+76>:	callq  0x40143a <explode_bomb>
+   0x000000000040105d <+81>:	add    $0x18,%rsp
+   0x0000000000401061 <+85>:	retq   
+End of assembler dump.
+(gdb) disas func4
+Dump of assembler code for function func4:
+   0x0000000000400fce <+0>:	sub    $0x8,%rsp
+   0x0000000000400fd2 <+4>:	mov    %edx,%eax
+   0x0000000000400fd4 <+6>:	sub    %esi,%eax
+   0x0000000000400fd6 <+8>:	mov    %eax,%ecx
+   0x0000000000400fd8 <+10>:	shr    $0x1f,%ecx
+   0x0000000000400fdb <+13>:	add    %ecx,%eax
+   0x0000000000400fdd <+15>:	sar    %eax
+   0x0000000000400fdf <+17>:	lea    (%rax,%rsi,1),%ecx
+   0x0000000000400fe2 <+20>:	cmp    %edi,%ecx
+   0x0000000000400fe4 <+22>:	jle    0x400ff2 <func4+36>
+   0x0000000000400fe6 <+24>:	lea    -0x1(%rcx),%edx
+   0x0000000000400fe9 <+27>:	callq  0x400fce <func4>
+   0x0000000000400fee <+32>:	add    %eax,%eax
+   0x0000000000400ff0 <+34>:	jmp    0x401007 <func4+57>
+   0x0000000000400ff2 <+36>:	mov    $0x0,%eax
+   0x0000000000400ff7 <+41>:	cmp    %edi,%ecx
+   0x0000000000400ff9 <+43>:	jge    0x401007 <func4+57>
+   0x0000000000400ffb <+45>:	lea    0x1(%rcx),%esi
+   0x0000000000400ffe <+48>:	callq  0x400fce <func4>
+   0x0000000000401003 <+53>:	lea    0x1(%rax,%rax,1),%eax
+   0x0000000000401007 <+57>:	add    $0x8,%rsp
+   0x000000000040100b <+61>:	retq   
+End of assembler dump.
+
+main:
++4>
++9> 	%rcx = (%rsp+12)  %rdx = (%rsp+8)
++14>	$0x4025cf 存着%d %d 读入两个数  第一个数为%rsp+8 第二个数为%rsp+12
++19>	%eax = 0
++24>	scanf
++29>	%eax != 2 的话就会爆炸,故应读入两个数
++34>	比较(%rsp+8)(无符号)与14,大于则会爆炸,否则，小于等于，跳到+46>
++46>	%edx = 14
++51>	%esi = 0
++56>	%edi = (%rsp+8) 
++60> 	call func4
+func4:	
++4>	%eax = %edx = 14
++6>	%eax = 14-0 = 14
++8>	%ecx=%eax = 14(原为 main 中 +9>%rcx = (%rsp+12) )
++10>	%ecx = 14 逻辑右移31位,等于0,即%ecx = 0
++13>	%eax += %ecx = 14
++15>	%eax 右移一位（%eax只有一个参数则只右移一位）%eax = 7
++17>	%ecx = 7
++20>	比较%ecx(7)是否小于等于%edi(%rsp+8),小于等于则跳到+36>否则+24>
+先假设小于等于
++36:	%eax = 0
++41:	%ecx(7)是否大于等于%edi(%rsp+8)
+如果为7
++57 return了
+则第一个数为最好7，就可以不递归调用了
+回到main:
++65: 	测试%eax是否为0,如果不为0则爆炸
++69:	比较第二个输入的数是否等于0,等于则跳到+81
++81:	出栈
++85:	return
+故答案为 7 0
+
+***
+
+Dump of assembler code for function phase_5:
+=> 0x0000000000401062 <+0>:	push   %rbx
+   0x0000000000401063 <+1>:	sub    $0x20,%rsp
+   0x0000000000401067 <+5>:	mov    %rdi,%rbx
+   0x000000000040106a <+8>:	mov    %fs:0x28,%rax
+   0x0000000000401073 <+17>:	mov    %rax,0x18(%rsp)
+   0x0000000000401078 <+22>:	xor    %eax,%eax
+   0x000000000040107a <+24>:	callq  0x40131b <string_length>
+   0x000000000040107f <+29>:	cmp    $0x6,%eax
+   0x0000000000401082 <+32>:	je     0x4010d2 <phase_5+112>
+   0x0000000000401084 <+34>:	callq  0x40143a <explode_bomb>
+   0x0000000000401089 <+39>:	jmp    0x4010d2 <phase_5+112>
+   0x000000000040108b <+41>:	movzbl (%rbx,%rax,1),%ecx
+   0x000000000040108f <+45>:	mov    %cl,(%rsp)
+   0x0000000000401092 <+48>:	mov    (%rsp),%rdx
+   0x0000000000401096 <+52>:	and    $0xf,%edx
+   0x0000000000401099 <+55>:	movzbl 0x4024b0(%rdx),%edx
+   0x00000000004010a0 <+62>:	mov    %dl,0x10(%rsp,%rax,1)
+   0x00000000004010a4 <+66>:	add    $0x1,%rax
+   0x00000000004010a8 <+70>:	cmp    $0x6,%rax
+   0x00000000004010ac <+74>:	jne    0x40108b <phase_5+41>
+   0x00000000004010ae <+76>:	movb   $0x0,0x16(%rsp)
+   0x00000000004010b3 <+81>:	mov    $0x40245e,%esi
+   0x00000000004010b8 <+86>:	lea    0x10(%rsp),%rdi
+   0x00000000004010bd <+91>:	callq  0x401338 <strings_not_equal>
+   0x00000000004010c2 <+96>:	test   %eax,%eax
+   0x00000000004010c4 <+98>:	je     0x4010d9 <phase_5+119>
+   0x00000000004010c6 <+100>:	callq  0x40143a <explode_bomb>
+   0x00000000004010cb <+105>:	nopl   0x0(%rax,%rax,1)
+   0x00000000004010d0 <+110>:	jmp    0x4010d9 <phase_5+119>
+   0x00000000004010d2 <+112>:	mov    $0x0,%eax
+   0x00000000004010d7 <+117>:	jmp    0x40108b <phase_5+41>
+   0x00000000004010d9 <+119>:	mov    0x18(%rsp),%rax
+   0x00000000004010de <+124>:	xor    %fs:0x28,%rax
+   0x00000000004010e7 <+133>:	je     0x4010ee <phase_5+140>
+   0x00000000004010e9 <+135>:	callq  0x400b30 <__stack_chk_fail@plt>
+   0x00000000004010ee <+140>:	add    $0x20,%rsp
+   0x00000000004010f2 <+144>:	pop    %rbx
+   0x00000000004010f3 <+145>:	retq   
+End of assembler dump.
+
+***
+开始run 到phase_5 后x/s %rsi,%rdi,%rax 发现都是我们输入的字符串...
+%rax 后被清零
+
++5> 	%rbx = %rdi,其中x/s $rdi得，%rbx = "123456"   (是我们输入的字符串) 
++8> +17> +124> +133>皆为与金丝雀值相关的操作
++22> 	异或%eax %eax 使其等于0
++29>	%eax string_length 应等于6,跳到+112>
++112>	%eax = 0
++117>	跳到+41>
++41>	%ecx = %rbx+%rax*1 = %rbx +0 = %rbx = "123456"
++45>	(%rsp) = %cl,%cl=0x31,即%rsp对应地址的值为 cl 的0x31   		1\"@
+	此时，x/s $rsp 得  "1\"@"  字符串，即我们输入的数字的第一个
++48>	%rdx 即为%rsp对应地址所存的字符,即为我们所输入的字符的第一个
++52>	%edx 与 $0x0f取and，将%edx的后四位保存下来
++55>	movzbl 将  %edx = (0x4024b0 + %rdx),即"maduiersnfotvbylSo you think you 
+					       can stop the bomb with ctrl-c, do you?"
+	的第%rdx+1 位的字符
++62>	(10+%rsp+0)  = %edx 的前8位,即一个字符，构成一个字符串的第一个字符
++66>	%rax +=1
+往复循环，即用输入的ASCII字符的后4位当作“maduiersnfotvbyl”的index，组成
+<+81>:	mov    $0x40245e,%esi
+中 x/s 0x40245e 所得出的"flyers"即可
+易有 index为
+9 15 14 5 6 7
+1001 1111 1110 0101 0110 0111
+)/.%&'
+9?NUVW
+所以字符为
+i o n e f g
+答案为：ionefg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

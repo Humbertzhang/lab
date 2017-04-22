@@ -203,8 +203,8 @@ void demoExploration(GWindow &window) {
             int mx = (int) mouseEvent.getX();
             int my = (int) mouseEvent.getY();
 
-            extern int oldColor;//HUMBERT ADD
-            oldColor = floodFillPixels.getRGB(mx,my);//HUMBERT ADD
+            //extern int oldColor;//HUMBERT ADD
+            //oldColor = floodFillPixels.getRGB(mx,my);//HUMBERT ADD
 
             cout << "Flood fill (x=" << dec << mx << ", y=" << my << "),"
                  << " color " << hex << setw(6) << setfill('0') << color
@@ -213,7 +213,7 @@ void demoExploration(GWindow &window) {
             int pixelsColored = floodFill(floodFillPixels, mx, my, color);
             cout << pixelsColored << " pixels colored." << endl;
             extern int count;//ADD BY HUMBERTZHANG
-            count = 0;       //ADD BY HUMBERTZHANG
+            //count = 0;       //ADD BY HUMBERTZHANG
             colorList.setEnabled(true);
         } else if(e.getEventClass() == ACTION_EVENT) {
             window.remove(&floodFillPixels);
